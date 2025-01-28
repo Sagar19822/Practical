@@ -1,0 +1,44 @@
+@echo off
+
+:: Detect OS
+for /f "tokens=2 delims=[]" %%i in ('ver') do set OS=%%i
+
+:: Common TCP/IP commands
+echo Executing: PING
+ping -n 4 google.com
+
+echo.
+echo Executing: IPCONFIG
+ipconfig
+
+echo.
+echo Executing: TRACERT
+tracert google.com
+
+echo.
+echo Executing: ARP
+arp -a
+
+echo.
+echo Executing: NETSTAT
+netstat -an
+
+echo.
+echo Executing: NSLOOKUP
+nslookup google.com
+
+echo.
+echo Executing: WHOIS (Not natively available on Windows, use a third-party tool)
+whois google.com
+
+echo.
+echo Executing: FTP
+ftp -v
+
+echo.
+echo Executing: TELNET
+(echo open google.com 80 & timeout /t 2) | telnet
+
+echo.
+echo All commands executed.
+pause
