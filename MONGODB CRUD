@@ -1,0 +1,49 @@
+use Product_DB
+
+db.products.insertOne({ID : 101 , Name : "Laptop" , Brand : "Asus" , Price : 30000});
+
+
+
+db.products.insertMany([
+    {ID : 102 , Name : "Mobile" , Brand : "Samsung" , Price : 20000},
+    {ID : 103 , Name : "Printer" , Brand : "Lexar" , Price : 5000}
+ 
+]);
+
+
+db.products.find();
+db.products.find({ID : 103 });
+db.products.find({Price : {$gt : 5000}});
+db.products.find({Price : {$lt : 30000}});
+db.products.find({Price : {$eq: 5000}});
+db.products.find({Price : {$gte : 5000}});
+db.products.find({Price : {$lte : 30000}});
+db.products.find({Price : {$ne : 5000}});
+
+db.products.countDocuments({Brand : "Asus"});
+
+db.products.find({},{Price : 1 , Name : 1 , Brand : 1 ,_id : 0});
+
+db.products.updateOne(
+    {ID : 102},
+    {$set : { Brand : "1+"}}
+);
+
+db.products.findOne({ID : 102});
+
+db.products.updateMany({},{$inc : {Price : 3000}});
+
+db.products.find();
+
+db.products.find().limit(2);
+
+db.products.find().sort({Price : 1})
+db.products.find().sort({Price : -1})
+
+db.products.deleteOne({ID : 102 });
+db.products.find();
+
+db.products.deleteMany({Price: {$lt: 10000}});
+db.products.find();
+
+db.dropDatabase();
