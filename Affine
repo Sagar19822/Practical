@@ -1,0 +1,72 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Function to find modular inverse of a under modulo m
+int modInverse(int a, int m) {
+    a = a % m;
+    for (int x = 1; x < m; x++) {
+        if ((a * x) % m == 1)
+            return x;
+    }
+    return -1; // No modular inverse if it doesn't exist
+}
+
+// Encryption function
+string affineEncrypt(string plaintext, int a, int b) {
+    string ciphertext = "";
+    for (char ch : plaintext) {
+        if (isalpha(ch)) {
+            char base = isupper(ch) ? 'A' : 'a';
+            ciphertext += (char)(((a * (ch - base) + b) % 26) + base);
+        } else {
+            ciphertext += ch; // Keep non-alphabet characters unchanged
+        }
+    }
+    return ciphertext;
+}
+
+// Decryption function
+string affineDecrypt(string ciphertext, int a, int b) {
+    string plaintext = "";
+    int a_inv = modInverse(a, 26); // modular inverse of a under mod 26
+    if (a_inv == -1) {
+        cout << "Multiplicative inverse for a doesn't exist. Decryption impossible.\n";
+        return "";
+    }
+    for (char ch : ciphertext) {
+        if (isalpha(ch)) {
+            char base = isupper(ch) ? 'A' : 'a';
+            plaintext += (char)(((a_inv * ((ch - base - b + 26)) % 26)) + base);
+        } else {
+            plaintext += ch;
+        }
+    }
+    return plaintext;
+}
+
+int main() {
+    string text;
+    int a, b;
+
+    cout << "Enter text: ";
+    getline(cin, text);
+
+    cout << "Enter key 'a' (must be coprime with 26): ";
+    cin >> a;
+    cout << "Enter key 'b': ";
+    cin >> b;
+
+    if (__gcd(a, 26) != 1) {
+        cout << "'a' must be coprime with 26. Encryption/Decryption not possible.\n";
+        return 1;
+    }
+
+    string encrypted = affineEncrypt(text, a, b);
+    cout << "Encrypted text: " << encrypted << endl;
+
+    string decrypted = affineDecrypt(encrypted, a, b);
+    cout << "Decrypted text: " << decrypted << endl;
+
+    return 0;
+}
